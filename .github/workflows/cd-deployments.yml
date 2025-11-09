@@ -32,7 +32,7 @@ jobs:
       DEV_COMM_HUB_SESSION_TOKENS_ID: ${{ secrets.DEV_COMM_HUB_SESSION_TOKENS_ID }}
       DEV_COMM_HUB_ACTIVATION_TOKENS_ID: ${{ secrets.DEV_COMM_HUB_ACTIVATION_TOKENS_ID }}
       DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID: ${{ secrets.DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID }}
-      DEV_SENDER_EMAIL: ${{ secrets.DEV_COMM_HUB_SENDER_EMAIL }}
+      SENDER_EMAIL: ${{ secrets.DEV_COMM_HUB_SENDER_EMAIL }}
 
     steps:
       - name: Checkout code
@@ -71,7 +71,7 @@ jobs:
         if: ${{ env.TARGET_ENV == 'dev' }}
         run: |
           # The list of variables to substitute, matching the placeholders in wrangler.toml
-          export ENV_VARS_TO_SUB="\$DEV_COMM_HUB_D1_DB_ID \$DEV_COMM_HUB_SESSION_TOKENS_ID \$DEV_COMM_HUB_ACTIVATION_TOKENS_ID \$DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID \$DEV_SENDER_EMAIL"
+          export ENV_VARS_TO_SUB="\$DEV_COMM_HUB_D1_DB_ID \$DEV_COMM_HUB_D1_DB_NAME \$DEV_COMM_HUB_SESSION_TOKENS_ID \$DEV_COMM_HUB_ACTIVATION_TOKENS_ID \$DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID \$SENDER_EMAIL"
 
           # Use envsubst to replace placeholders in wrangler.toml, overwriting the file
           envsubst "$ENV_VARS_TO_SUB" < wrangler.toml > wrangler.toml.tmp
