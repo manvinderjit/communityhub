@@ -103,31 +103,38 @@ id = "${DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID}"
 # bucket_name = ""
 
 # PRODUCTION env configuration
-# [env.production.vars]
-# NODE_ENV = "production"
-# SENDER_EMAIL=""
+[env.production.vars]
+NODE_ENV = "production"
+SENDER_EMAIL = "${PROD_COMM_HUB_SENDER_EMAIL}"
 # BASE_URL = ""
 # FRONTEND_URL = ""
 
-# [[env.production.d1_databases]]
-# binding = "Database"
-# database_name = "vms-production"
-# database_id = ""
+[env.prod.assets]
+# Build directory for the frontend
+directory = "dist/client"
+binding = "Assets"
+# Add a 404 page here in the future
+not_found_handling = "none"
+html_handling = "auto-trailing-slash"
 
-# [[env.production.kv_namespaces]]
-# binding = "SessionTokens"
-# id = ""
-# preview_id = "vms-production-session-tokens"
+[[env.production.d1_databases]]
+binding = "Database"
+database_name = "${PROD_COMM_HUB_D1_DB_NAME}"
+database_id = "${PROD_COMM_HUB_D1_DB_ID}"
+migrations_table = "migrations"
+migrations_dir = "db/migrations"
 
-# [[env.production.kv_namespaces]]
-# binding = "ActivationTokens"
-# id = ""
-# preview_id = "vms-production-activation-tokens"
+[[env.production.kv_namespaces]]
+binding = "SessionTokens"
+id = "${PROD_COMM_HUB_SESSION_TOKENS_ID}"
 
-# [[env.production.kv_namespaces]]
-# binding = "PasswordResetToken"
-# id = ""
-# preview_id = "vms-production-password-reset-token"
+[[env.production.kv_namespaces]]
+binding = "ActivationTokens"
+id = "${PROD_COMM_HUB_ACTIVATION_TOKENS_ID}"
+
+[[env.production.kv_namespaces]]
+binding = "PasswordResetToken"
+id = "${PROD_COMM_HUB_PASSWORD_RESET_TOKENS_ID}"
 
 # [[env.production.r2_buckets]]
 # binding = "ExportedFiles"
