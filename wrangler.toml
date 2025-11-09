@@ -85,17 +85,17 @@ migrations_dir = "db/migrations"
 
 [[env.dev.kv_namespaces]]
 binding = "SessionTokens"
-id = "${DEV_COMM_HUB_SESSION_TOKENS}"
+id = "${DEV_COMM_HUB_SESSION_TOKENS_ID}"
 # preview_id = "vms-dev-session-tokens"
 
 [[env.dev.kv_namespaces]]
 binding = "ActivationTokens"
-id = "${DEV_COMM_HUB_ACTIVATION_TOKENS}"
+id = "${DEV_COMM_HUB_ACTIVATION_TOKENS_ID}"
 # preview_id = "vms-dev-activation-tokens"
 
 [[env.dev.kv_namespaces]]
 binding = "PasswordResetToken"
-id = "${DEV_COMM_HUB_PASSWORD_RESET_TOKENS}"
+id = "${DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID}"
 # preview_id = "vms-dev-password-reset-token"
 
 # [[env.dev.r2_buckets]]
