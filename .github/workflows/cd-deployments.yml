@@ -4,8 +4,8 @@ env:
   # Set the target environment variable for use in steps
   TARGET_ENV: ${{ github.ref_name == 'main' && 'production' || 'dev' }}
 
-on:  
-  pull_request:
+on:
+  push:
     branches:
       - main
       - dev
