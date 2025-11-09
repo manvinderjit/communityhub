@@ -53,7 +53,7 @@ jobs:
         if: ${{ env.TARGET_ENV == 'dev' }}
         run: |
           echo "Attempting to delete Dev database"
-          npx wrangler d1 delete ${{ env.DEV_COMM_HUB_D1_DB_NAME }} --force || true
+          npx wrangler d1 delete ${{ env.DEV_COMM_HUB_D1_DB_NAME }} -y || true
 
       - name: Apply D1 Migrations to Target D1 Database
         if: ${{ env.TARGET_ENV == 'dev' }}
