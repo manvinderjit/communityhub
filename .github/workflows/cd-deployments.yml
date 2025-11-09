@@ -7,9 +7,6 @@ env:
 on:
   push:
     branches:
-      - chore/deployment # For testing only, remove before merging with dev
-  pull_request:
-    branches:
       - main
       - dev
 
