@@ -103,6 +103,12 @@ jobs:
         if: ${{ env.TARGET_ENV == 'dev' }}
         run: npx wrangler d1 execute Database --env dev --remote --file=./db/seeds/seed-data.sql
 
+      - name: Inject Resend API Key Secret
+        run: |
+          # Use the secret from GitHub, piping it directly to the command
+          # to prevent it from being stored in shell history or logs.
+          echo "${{ secrets.DEV_COMM_HUB_RESEND_API_KEY }}" | npx wrangler secret put RESEND_API_KEY --env dev > /dev/null
+
       - name: Deploy application to Dev Worker
         if: ${{ env.TARGET_ENV == 'dev' }}
         run: npx wrangler deploy --minify --env dev
