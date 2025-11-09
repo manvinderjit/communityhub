@@ -62,7 +62,13 @@ jobs:
         if: ${{ env.TARGET_ENV == 'dev' }}
         run: npx wrangler d1 create ${{ env.DEV_COMM_HUB_D1_DB_NAME }} --env dev > /dev/null
 
-      - name: Set Environment Variable in Wrangler TOML
+      - name: Inject DEV D1 and KV IDs via SED Set Environment Variable in Wrangler TOML
+        if: ${{ env.TARGET_ENV == 'dev' }}
+        env:
+          # Ensure you are loading your KV IDs from GitHub Secrets into these env vars
+          DEV_SESSION_ID: ${{ secrets.DEV_COMM_HUB_SESSION_TOKENS_ID }}
+          DEV_ACTIVATION_ID: ${{ secrets.DEV_COMM_HUB_ACTIVATION_TOKENS_ID }}
+          DEV_PASSWORD_ID: ${{ secrets.DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID }}
         run: |
           DB_ID=$(npx wrangler d1 info ${{ env.DEV_COMM_HUB_D1_DB_NAME }} --json | jq -r '.uuid')
           echo "DEV_COMM_HUB_D1_DB_ID=$DB_ID" >> $GITHUB_ENV
@@ -70,13 +76,20 @@ jobs:
           sed -i "s#database_name = \"\${DEV_COMM_HUB_D1_DB_NAME}\"#database_name = \"${{ env.DEV_COMM_HUB_D1_DB_NAME }}\"#g" wrangler.toml
           sed -i "s#database_id = \"\${DEV_COMM_HUB_D1_DB_ID}\"#database_id = \"$DB_ID\"#g" wrangler.toml
 
-          grep -A 3 "d1_databases" wrangler.toml
+          # SessionTokens: Replace placeholder with actual ID
+          sed -i "s#id = \"\${DEV_COMM_HUB_SESSION_TOKENS}\"#id = \"$DEV_SESSION_ID\"#g" wrangler.toml
 
-      - name: Print Final wrangler.toml for Debugging
-        run: |
-          echo "--- Contents of wrangler.toml ---"
-          cat wrangler.toml
-          echo "---------------------------------"
+          # ActivationTokens: Replace placeholder with actual ID
+          sed -i "s#id = \"\${DEV_COMM_HUB_ACTIVATION_TOKENS}\"#id = \"$DEV_ACTIVATION_ID\"#g" wrangler.toml
+
+          # PasswordResetToken: Replace placeholder with actual ID
+          sed -i "s#id = \"\${DEV_COMM_HUB_PASSWORD_RESET_TOKENS}\"#id = \"$DEV_PASSWORD_ID\"#g" wrangler.toml
+
+      # - name: Print Final wrangler.toml for Debugging
+      #   run: |
+      #     echo "--- Contents of wrangler.toml ---"
+      #     cat wrangler.toml
+      #     echo "---------------------------------"
 
       - name: Apply D1 Migrations to DEV D1 Database
         env:
@@ -89,3 +102,7 @@ jobs:
           DEV_COMM_HUB_D1_DB_ID: ${{ env.DEV_COMM_HUB_D1_DB_ID }}
         if: ${{ env.TARGET_ENV == 'dev' }}
         run: npx wrangler d1 execute Database --env dev --remote --file=./db/seeds/seed-data.sql
+
+      - name: Deploy application to Dev Worker
+        if: ${{ env.TARGET_ENV == 'dev' }}
+        run: npx wrangler deploy --minify --env dev

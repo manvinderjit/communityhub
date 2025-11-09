@@ -67,6 +67,14 @@ NODE_ENV = "development"
 # BASE_URL = ""
 # FRONTEND_URL = ""
 
+[env.dev.assets]
+# Build directory for the frontend
+directory = "dist/client"
+binding = "Assets"
+# Add a 404 page here in the future
+not_found_handling = "none"
+html_handling = "auto-trailing-slash"
+
 [[env.dev.d1_databases]]
 binding = "Database"
 # The following placeholder vars will be substituted at run time
@@ -75,19 +83,19 @@ database_id = "${DEV_COMM_HUB_D1_DB_ID}"
 migrations_table = "migrations"
 migrations_dir = "db/migrations"
 
-# [[env.dev.kv_namespaces]]
-# binding = "SessionTokens"
-# id = ""
+[[env.dev.kv_namespaces]]
+binding = "SessionTokens"
+id = "${DEV_COMM_HUB_SESSION_TOKENS}"
 # preview_id = "vms-dev-session-tokens"
 
-# [[env.dev.kv_namespaces]]
-# binding = "ActivationTokens"
-# id = ""
+[[env.dev.kv_namespaces]]
+binding = "ActivationTokens"
+id = "${DEV_COMM_HUB_ACTIVATION_TOKENS}"
 # preview_id = "vms-dev-activation-tokens"
 
-# [[env.dev.kv_namespaces]]
-# binding = "PasswordResetToken"
-# id = ""
+[[env.dev.kv_namespaces]]
+binding = "PasswordResetToken"
+id = "${DEV_COMM_HUB_PASSWORD_RESET_TOKENS}"
 # preview_id = "vms-dev-password-reset-token"
 
 # [[env.dev.r2_buckets]]
