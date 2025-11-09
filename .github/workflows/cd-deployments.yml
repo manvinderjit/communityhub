@@ -69,11 +69,12 @@ jobs:
           DEV_SESSION_ID: ${{ secrets.DEV_COMM_HUB_SESSION_TOKENS_ID }}
           DEV_ACTIVATION_ID: ${{ secrets.DEV_COMM_HUB_ACTIVATION_TOKENS_ID }}
           DEV_PASSWORD_ID: ${{ secrets.DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID }}
+          DEV_SENDER_EMAIL: ${{ secrets.DEV_COMM_HUB_SENDER_EMAIL }}
         run: |
           DB_ID=$(npx wrangler d1 info ${{ env.DEV_COMM_HUB_D1_DB_NAME }} --json | jq -r '.uuid')
           echo "DEV_COMM_HUB_D1_DB_ID=$DB_ID" >> $GITHUB_ENV
 
-          sed -i "s#database_name = \"\${DEV_COMM_HUB_D1_DB_NAME}\"#database_name = \"${{ env.DEV_COMM_HUB_D1_DB_NAME }}\"#g" wrangler.toml
+          sed -i "s#database_name = \"\${DEV_COMM_HUB_D1_DB_NAME}\"#database_name = \"$DEV_COMM_HUB_D1_DB_NAME\"#g" wrangler.toml
           sed -i "s#database_id = \"\${DEV_COMM_HUB_D1_DB_ID}\"#database_id = \"$DB_ID\"#g" wrangler.toml
 
           # SessionTokens: Replace placeholder with actual ID
@@ -84,6 +85,8 @@ jobs:
 
           # PasswordResetToken: Replace placeholder with actual ID
           sed -i "s#id = \"\${DEV_COMM_HUB_PASSWORD_RESET_TOKENS}\"#id = \"$DEV_PASSWORD_ID\"#g" wrangler.toml
+
+          sed -i "s#SENDER_EMAIL = \"\${DEV_COMM_HUB_SENDER_EMAIL}\"#SENDER_EMAIL = \"$DEV_SENDER_EMAIL\"#g" wrangler.toml
 
       # - name: Print Final wrangler.toml for Debugging
       #   run: |
