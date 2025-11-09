@@ -70,6 +70,8 @@ NODE_ENV = "development"
 [[env.dev.d1_databases]]
 binding = "Database"
 database_name = "${DEV_COMM_HUB_D1_DB_NAME}"
+# The following placeholder id is required to prevent validation errors with wrangler
+database_id = "${DEV_COMM_HUB_D1_DB_ID_PLACEHOLDER}"
 migrations_table = "migrations"
 migrations_dir = "db/migrations"
 
