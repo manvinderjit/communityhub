@@ -109,7 +109,7 @@ SENDER_EMAIL = "${PROD_COMM_HUB_SENDER_EMAIL}"
 # BASE_URL = ""
 # FRONTEND_URL = ""
 
-[env.prod.assets]
+[env.production.assets]
 # Build directory for the frontend
 directory = "dist/client"
 binding = "Assets"
