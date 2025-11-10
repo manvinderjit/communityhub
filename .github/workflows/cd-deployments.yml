@@ -25,7 +25,7 @@ jobs:
 
       # Secrets/Vars that need to be substituted into wrangler.toml
       # DEV
-      DEV_COMM_HUB_D1_DB_NAME: ${{ vars.DEV_COMM_HUB_D1_DB_NAME }}
+      DEV_COMM_HUB_D1_DB_NAME: ${{ secrets.DEV_COMM_HUB_D1_DB_NAME }}
       DEV_COMM_HUB_SESSION_TOKENS_ID: ${{ secrets.DEV_COMM_HUB_SESSION_TOKENS_ID }}
       DEV_COMM_HUB_ACTIVATION_TOKENS_ID: ${{ secrets.DEV_COMM_HUB_ACTIVATION_TOKENS_ID }}
       DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID: ${{ secrets.DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID }}
@@ -78,7 +78,7 @@ jobs:
           # The list of variables to substitute, matching the placeholders in wrangler.toml
           export ENV_VARS_TO_SUB="\$DEV_COMM_HUB_D1_DB_ID \$DEV_COMM_HUB_D1_DB_NAME \$DEV_COMM_HUB_SESSION_TOKENS_ID \$DEV_COMM_HUB_ACTIVATION_TOKENS_ID \$DEV_COMM_HUB_PASSWORD_RESET_TOKENS_ID \$DEV_COMM_HUB_SENDER_EMAIL"
 
-          # Use envsubst to replace placeholders in wrangler.toml, overwriting the file
+          # Use envsubst to replace DEV placeholders in wrangler.toml, overwriting the file
           envsubst "$ENV_VARS_TO_SUB" < wrangler.toml > wrangler.toml.tmp
           mv wrangler.toml.tmp wrangler.toml
 
@@ -96,11 +96,14 @@ jobs:
 
       - name: Inject Bindings/Vars into Wrangler TOML using envsubst (PROD Only)
         if: ${{ env.TARGET_ENV == 'production' }}
+        env:
+          # Expose PROD D1 ID as a shell variable for envsubst
+          PROD_COMM_HUB_D1_DB_ID: ${{ secrets.PROD_COMM_HUB_D1_DB_ID }}
         run: |
           # The list of variables to substitute, matching the placeholders in wrangler.toml
           export ENV_VARS_TO_SUB="\$PROD_COMM_HUB_D1_DB_ID \$PROD_COMM_HUB_D1_DB_NAME \$PROD_COMM_HUB_SESSION_TOKENS_ID \$PROD_COMM_HUB_ACTIVATION_TOKENS_ID \$PROD_COMM_HUB_PASSWORD_RESET_TOKENS_ID \$PROD_COMM_HUB_SENDER_EMAIL"
 
-          # Use envsubst to replace placeholders in wrangler.toml, overwriting the file
+          # Use envsubst to replace PROD placeholders in wrangler.toml, overwriting the file
           envsubst "$ENV_VARS_TO_SUB" < wrangler.toml > wrangler.toml.tmp
           mv wrangler.toml.tmp wrangler.toml
 
